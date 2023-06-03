@@ -15,6 +15,12 @@ env_vars = dotenv_values('.env')
 
 uri = "~/.lancedb"
 db = lancedb.connect(uri)
+embeddings = OpenAIEmbeddings()
+
+if 'text' not in db.table_names():
+    table = db.create_table("text", data=[
+        {"vector": embeddings.embed_query("Hello World"), "text": "Hello World", "id": "1"}
+    ])
 app = Flask(__name__)
 
 OPENAI_API_KEY = env_vars['OPENAI_API_KEY']
@@ -32,11 +38,6 @@ def store_embedding():
     metadata = json_data['metadata']
     document = Document(page_content=text, metadata=metadata)
     chunks = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0).split_documents([document])
-    embeddings = OpenAIEmbeddings()
-
-    table = db.create_table("text", data=[
-        {"vector": embeddings.embed_query("Hello World"), "text": "Hello World", "id": "1"}
-    ], mode="overwrite")
 
     docsearch = LanceDB.from_documents(chunks, embeddings, connection=table)
     
@@ -47,18 +48,10 @@ def store_embedding():
 def retrieve_embedding():
    json_data = request.get_json()
    query = json_data['query']
+   docs = LanceDB(embedding=embeddings, connection=table).similarity_search(query, 3)
 
-   assert len(openai.Model.list()["data"]) > 0
-   
-   def embed_func(query):
-        rs = openai.Embedding.create(input=query, engine="text-embedding-ada-002")
-        return [record["embedding"] for record in rs["data"]]
-   
-   query_vector = embed_func([query])[0]
-   table = db.open_table("text")
-   docs = table.search(query_vector).limit(10).to_df()
    print(docs)
-   return docs
+   return [d.page_content for d in docs]
 
 
 
