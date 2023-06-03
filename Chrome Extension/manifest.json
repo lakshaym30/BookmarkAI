@@ -1,12 +1,15 @@
 {
-  "name": "Bookmark Manager",
-  "version": "1.0.0",
-  "description": "latest covid data of UK",
+  "name": "Text Extractor",
+  "version": "1.0",
   "manifest_version": 3,
-  "author": "Sampurna Chapagain",
-  "permissions": ["tabs"],
+  "permissions": ["activeTab"],
   "action": {
-    "default_popup": "index.html",
-    "default_title": "Latest Covid Report"
-  }
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"]
+    }
+  ]
 }
