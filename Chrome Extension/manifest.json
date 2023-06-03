@@ -1,0 +1,12 @@
+{
+  "name": "Bookmark Manager",
+  "version": "1.0.0",
+  "description": "latest covid data of UK",
+  "manifest_version": 3,
+  "author": "Sampurna Chapagain",
+  "permissions": ["tabs"],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Latest Covid Report"
+  }
+}
