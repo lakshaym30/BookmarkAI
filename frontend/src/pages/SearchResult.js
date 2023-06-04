@@ -1,6 +1,7 @@
 import { useSearchParams } from 'react-router-dom'
 import { Typography, Box, Grid, Paper, InputBase, Stack } from '@mui/material';
 import SourceList from '../components/SourceList';
+import { MuiMarkdown } from 'mui-markdown';
 import Chat from '../components/Chat';
 import { useEffect, useState } from 'react';
 
@@ -56,7 +57,9 @@ export default function SearchResult() {
                             
                             <Box sx={{ pb: 3, mb: 3}}>
                                 <Typography variant="body1" fontSize='20px' mr={6}>
-                                 {responseMessages.map(mes => mes.chat_response).join('')}
+                                    <MuiMarkdown>
+                                        {responseMessages.map(mes => mes.chat_response).join('')}
+                                    </MuiMarkdown>
                                 </Typography>   
                             </Box>    
                            
