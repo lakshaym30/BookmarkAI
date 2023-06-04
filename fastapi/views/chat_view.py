@@ -2,6 +2,7 @@ import json
 import logging
 from typing import AsyncGenerator
 
+import numpy as np
 from fastapi import APIRouter
 from langchain.embeddings import OpenAIEmbeddings
 from starlette.responses import StreamingResponse
@@ -11,26 +12,32 @@ from services.conversation_service import ConversationService
 from utils.db import get_vectorstore
 
 router = APIRouter()
-chat_service = ConversationService(vectorstore=get_vectorstore('text', OpenAIEmbeddings()))
 
 logger = logging.getLogger(__name__)
 
 
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()  # Convert NumPy array to Python list
+        return super(NumpyEncoder, self).default(obj)
+
+
 async def sse_generator(messages_generator: AsyncGenerator[ChatServiceMessage, None]):
     async for msg in messages_generator:
-        msg_dict = {'chat_response': msg.msg, 'documents': [d.dict() for d in msg.relevant_documents]}
+        msg_dict = {'chat_response': msg.msg, 'documents': [d.dict() for d in msg.relevant_documents], 'done': msg.done}
         if msg.done:
             # save to db
-            print(f'yielding {msg.json()}')
-            yield f"data: {json.dumps(msg_dict)}\n\n"
+            print(f'yielding {msg.dict()}')
+            yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n"
         else:
-            print(f'yielding {msg.json()}')
-            yield f"data: {json.dumps(msg_dict)}\n\n"
+            print(f'yielding {msg.dict()}')
+            yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n"
 
 
 @router.get('/chat', responses={200: {"content": {"text/event-stream": {}}}})
 async def chat(q: str):
-    logger.info("chatting")
+    chat_service = ConversationService(vectorstore=get_vectorstore('text', OpenAIEmbeddings()))
     completion = chat_service.chat(
         message=q,
     )

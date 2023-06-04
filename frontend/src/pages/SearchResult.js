@@ -21,7 +21,10 @@ export default function SearchResult() {
                 eventSource.close();
               }
             console.log(responseMessages.map(mes => mes.chat_response).join(''))
+            console.log(responseMessages.flatMap(mes => mes.documents))
           };
+
+
           
       
           // Cleanup on component unmount
@@ -53,7 +56,7 @@ export default function SearchResult() {
                             
                             <Box sx={{ pb: 3, mb: 3}}>
                                 <Typography variant="body1" fontSize='20px' mr={6}>
-                                 {responseMessages}
+                                 {responseMessages.map(mes => mes.chat_response).join('')}
                                 </Typography>   
                             </Box>    
                            
@@ -79,11 +82,14 @@ export default function SearchResult() {
                     </Paper>
 
                 </Grid>
-                {responseMessages.length > 0 &&
-                    <Grid item xs={4}>
-                        <SourceList source={responseMessages} urls={responseMessages[0].documents.map(doc => doc.metadata.url)}/> 
-                    </Grid>
-                }
+                
+                <Grid item xs={4}>
+                    <SourceList 
+                        source={responseMessages}
+                        urls={[...new Set(responseMessages.flatMap(mes => mes.documents.map(doc => doc.metadata.url)))]}
+                    /> 
+                </Grid>
+
             </Grid>
         </Box>
 

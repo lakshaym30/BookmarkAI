@@ -70,6 +70,7 @@ class ConversationService:
 
     async def chat(self, message: str):
         context = self.get_context(message)
+        print(context)
         full_response = ''
 
         token_generator = self._get_message_generator(
@@ -84,6 +85,6 @@ class ConversationService:
             full_response += content
             if content == '':  # if the message is empty - ignore it
                 continue
-            yield ChatServiceMessage(msg=content)
+            yield ChatServiceMessage(msg=content, relevant_documents=context, done=False)
 
-        yield ChatServiceMessage(msg=full_response, done=True)
+        yield ChatServiceMessage(msg=full_response, relevant_documents=context, done=True)
