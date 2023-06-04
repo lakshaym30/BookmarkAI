@@ -10,8 +10,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/home" element={<Homescreen/>} />
-        <Route path="/" element={<Layout/>}>
-          <Route path="browse" element={<BrowseScreen/>}/>
+        <Route element={<Layout/>}>
+          <Route path="/browse" element={<BrowseScreen/>}/>
         </Route>
         {/* <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

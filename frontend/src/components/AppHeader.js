@@ -22,7 +22,7 @@ export default function AppHeader() {
                         src={logo} 
                         alt="Split.it Logo" 
                         style={{
-                            height: 70,
+                            height: 60,
                             marginLeft: 5,
                             marginRight: 10,
                         }}
