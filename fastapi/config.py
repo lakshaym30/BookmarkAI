@@ -35,4 +35,4 @@ class Config(metaclass=Singleton):
         openai.organization = os.getenv("OPENAI_ORGANIZATION")
 
         self.debug_mode = os.getenv("DEBUG_MODE", "False") == "True"
-        self.lancdeb_url = os.getenv("LANCDEB_URL", "./lancdeb")
+        self.lancedb_url = os.getenv("LANCEDB_URL", "lancedb")

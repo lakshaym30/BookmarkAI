@@ -23,33 +23,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const url = window.location.href;
 
         console.log(text); // or you can send this data back using sendResponse
-
-        fetch('http://localhost:5000/store', {
-            method: 'OPTIONS',
+        return fetch('http://localhost:8000/store', {
+            method: 'POST',
             headers: {
-                'Access-Control-Request-Method': 'POST',
-                'Access-Control-Request-Headers': 'Content-Type'
-            }
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ raw_text: text, url: url })
         })
-            .then(response => {
-                // Proceed with the POST request
-                return fetch('http://localhost:5000/store', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ raw_text: text, url: url })
-                });
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Process the response from the POST request
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
+        .then(response => response.json())
+        .then(data => {
+            // Process the response from the POST request
+            console.log(data);
+        })
+        .catch(error => {
+            // Handle any errors
+            console.error(error);
+        });
         // .then(response => console.log(response.text()))
         // .then(result => console.log(result))
         // .catch(error => console.error(error));
