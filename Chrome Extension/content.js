@@ -8,41 +8,52 @@ function extractText(node) {
     }
 
     let text = '';
-    for(let child of node.childNodes) {
+    for (let child of node.childNodes) {
         text += ' ' + extractText(child);
     }
 
     return text.trim();
 }
 
-function extractImageSources() {
-    var images = document.getElementsByTagName('img'); // get all images
-    var imgSources = []; // initialize empty array to hold the sources
-
-    for (var i = 0; i < images.length; i++) {
-        imgSources.push(images[i].src); // add each image's source to the array
-    }
-
-    return imgSources; // return the array of image sources
-}
-
-
 // Listen for messages
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.command === 'extractText') {
-        let text = extractText(document.body);
+        const text = extractText(document.body);
+        // get the url of the current tab
+        const url = window.location.href;
+
         console.log(text); // or you can send this data back using sendResponse
-        sendResponse({result: text});
-    } else if (request.command === 'extractImageSources') {
-        let imgSources = extractImageSources();
-        console.log(imgSources); // or you can send this data back using sendResponse
-        sendResponse({result: imgSources});
-    } else if (request.command === 'extractPage') {
-        let text = extractText(document.body);
-        let imgSources = extractImageSources();
-        console.log(text); // or you can send this data back using sendResponse
-        console.log(imgSources); // or you can send this data back using sendResponse
-        sendResponse({textContent: text});
-        sendResponse({imgSources: imgSources});
+
+        fetch('http://localhost:5000/store', {
+            method: 'OPTIONS',
+            headers: {
+                'Access-Control-Request-Method': 'POST',
+                'Access-Control-Request-Headers': 'Content-Type'
+            }
+        })
+            .then(response => {
+                // Proceed with the POST request
+                return fetch('http://localhost:5000/store', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ raw_text: text, url: url })
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Process the response from the POST request
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error(error);
+            });
+        // .then(response => console.log(response.text()))
+        // .then(result => console.log(result))
+        // .catch(error => console.error(error));
+
+        sendResponse({ result: text });
     }
 });
