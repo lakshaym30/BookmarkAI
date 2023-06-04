@@ -18,19 +18,21 @@ logger = logging.getLogger(__name__)
 
 async def sse_generator(messages_generator: AsyncGenerator[ChatServiceMessage, None]):
     async for msg in messages_generator:
+        msg_dict = {'chat_response': msg.msg, 'documents': [d.dict() for d in msg.relevant_documents]}
         if msg.done:
             # save to db
-            logger.info(f'yielding {msg.json()}')
-            msg_dict = {'chat_response': msg.msg, 'documents': [d.dict() for d in msg.relevant_documents]}
-            yield json.dumps(msg_dict)
+            print(f'yielding {msg.json()}')
+            yield f"data: {json.dumps(msg_dict)}\n\n"
         else:
-            yield msg.json()
+            print(f'yielding {msg.json()}')
+            yield f"data: {json.dumps(msg_dict)}\n\n"
 
 
-@router.post('/chat', responses={200: {"content": {"text/event-stream": {}}}})
-async def chat(message: UserChatMessage):
+@router.get('/chat', responses={200: {"content": {"text/event-stream": {}}}})
+async def chat(q: str):
+    logger.info("chatting")
     completion = chat_service.chat(
-        message=message.message,
+        message=q,
     )
     sse = StreamingResponse(sse_generator(completion),
                             media_type='text/event-stream')
