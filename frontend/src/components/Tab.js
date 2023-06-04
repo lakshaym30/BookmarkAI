@@ -5,6 +5,7 @@
 import ChatIcon from '@mui/icons-material/Chat';
 import ArticleIcon from '@mui/icons-material/Article';
 import ImageIcon from '@mui/icons-material/Image';
+import { useNavigate } from 'react-router-dom';
 
 // export default function ColorTabs() {
 //   const [value, setValue] = React.useState('one');
@@ -81,7 +82,7 @@ const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} /
 
 export default function CustomizedTabs() {
   const [value, setValue] = React.useState(0);
-
+  const navigate = useNavigate();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -90,9 +91,9 @@ export default function CustomizedTabs() {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ bgcolor: '#fff'}}>
         <AntTabs value={value} onChange={handleChange} aria-label="ant example" sx={{pl: 36}}>
-          <AntTab sx={{fontSize: "18px"}} icon={<ChatIcon />} iconPosition="start" label="All" />
-          <AntTab sx={{fontSize: "18px"}} icon={<ArticleIcon />} iconPosition="start" label="Text"  />
-          <AntTab sx={{fontSize: "18px"}} icon={<ImageIcon />} iconPosition="start" label="Image"/>
+          <AntTab onClick={() => navigate('/browse')} sx={{fontSize: "18px"}} icon={<ChatIcon />} iconPosition="start" label="All" />
+          <AntTab onClick={() => navigate('/browse')} sx={{fontSize: "18px"}} icon={<ArticleIcon />} iconPosition="start" label="Text"  />
+          <AntTab onClick={() => navigate('/images')} sx={{fontSize: "18px"}} icon={<ImageIcon />} iconPosition="start" label="Image"/>
         </AntTabs>
         <Box sx={{ p: 0}} />
       </Box>

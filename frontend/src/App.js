@@ -4,21 +4,21 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homescreen from './pages/Homescreen';
 import BrowseScreen from './pages/BrowseScreen';
 import Layout from './pages/Layout';
+import BrowseImages from './pages/BrowseImages';
+import SearchResult from './pages/SearchResult';
+
+import SourceList from './components/SourceList';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/home" element={<Homescreen/>} />
+        <Route path="/" element={<Homescreen/>} />
         <Route element={<Layout/>}>
           <Route path="/browse" element={<BrowseScreen/>}/>
+          <Route path="/images" element={<BrowseImages/>}/>
+          <Route path="/search" element={<SearchResult/>}/>
         </Route>
-        {/* <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="blogs" element={<Blogs />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="*" element={<NoPage />} />
-        </Route> */}
       </Routes>
     </BrowserRouter>
   );
