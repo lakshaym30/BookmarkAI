@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         console.log(text); // or you can send this data back using sendResponse
 
-        fetch('http://localhost:5000/test', {
+        fetch('http://localhost:5000/store', {
             method: 'OPTIONS',
             headers: {
                 'Access-Control-Request-Method': 'POST',
@@ -33,7 +33,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         })
             .then(response => {
                 // Proceed with the POST request
-                return fetch('http://localhost:5000/test', {
+                return fetch('http://localhost:5000/store', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
