@@ -11,15 +11,14 @@ import { useState } from 'react';
 export default function BrowseScreen(props) {
     const navigate = useNavigate();
     const [ genAI, setGenAI ] = useState(false);
-    const [ lance, setLancedb ] = useState(false);
     return(
         <>
         <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
             <Grid item xs={2}/>
             <Grid item xs={10}>
-                <SubjectList setGenAI = { setGenAI } setLancedb = { setLancedb }/>
-                <BookMarkList genAI = { genAI } lance = {lance} />
+                <SubjectList setGenAI = { setGenAI }/>
+                <BookMarkList genAI = { genAI }/>
             </Grid>
         </Grid>
         </Box>

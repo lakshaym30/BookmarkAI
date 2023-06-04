@@ -2,25 +2,11 @@ import * as React from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { image_list } from '../services-mock/fake_dataset';
-import trump1 from '../assets/images/trump1.png';
-import trump2 from '../assets/images/trump2.png';
-import trump3 from '../assets/images/trump3.png';
-import { useSearchParams } from 'react-router-dom';
-
 
 export default function BookMarkImageList() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('q')
-
   return (
     <ImageList sx={{ width: "90%", maxHeight: "100vh" }} cols={3}>
-      <ImageListItem >
-          <img
-            src={`${trump1}`}
-            loading="lazy"
-          />
-        </ImageListItem>
-      {!query && image_list.map((item) => (
+      {image_list.map((item) => (
         <ImageListItem key={item.img}>
           <img
             src={`${item}`}
@@ -28,13 +14,7 @@ export default function BookMarkImageList() {
           />
         </ImageListItem>
       ))}
-      <ImageListItem >
-          <img
-            src={`${trump2}`}
-            loading="lazy"
-          />
-        </ImageListItem>
-      {!query && itemData.map((item) => (
+      {itemData.map((item) => (
         <ImageListItem key={item.img}>
           <img
             src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
@@ -44,12 +24,6 @@ export default function BookMarkImageList() {
           />
         </ImageListItem>
       ))}
-      <ImageListItem >
-          <img
-            src={`${trump3}`}
-            loading="lazy"
-          />
-        </ImageListItem>
     </ImageList>
   );
 }

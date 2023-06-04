@@ -3,7 +3,6 @@ import logging
 from typing import AsyncGenerator
 
 import numpy as np
-
 from fastapi import APIRouter
 from langchain.embeddings import OpenAIEmbeddings
 from starlette.responses import StreamingResponse
@@ -14,9 +13,7 @@ from utils.db import get_vectorstore
 
 router = APIRouter()
 
-
 logger = logging.getLogger(__name__)
-
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -35,7 +32,7 @@ async def sse_generator(messages_generator: AsyncGenerator[ChatServiceMessage, N
             yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n"
         else:
             print(f'yielding {msg.dict()}')
-            yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n
+            yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n"
 
 
 @router.get('/chat', responses={200: {"content": {"text/event-stream": {}}}})
