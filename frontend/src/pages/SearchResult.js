@@ -36,9 +36,16 @@ export default function SearchResult() {
     function keyPress(e){
         if(e.key === 'Enter'){
             e.preventDefault();
-            // setChats([...chats, e.target.value]);
+            setResponseMessages([])
+            setSearchParams({q:inputValue});
+            setInputValue('')
         }
     }
+    const [inputValue, setInputValue] = useState('');
+    function handleInputChange(e){
+        setInputValue(e.target.value);
+    }
+
 
 
     return(
@@ -80,6 +87,8 @@ export default function SearchResult() {
                             onKeyDown={keyPress}
                             placeholder="Send A Message"
                             inputProps={{ 'aria-label': 'search google maps' }}
+                            value={inputValue}
+                            onChange={handleInputChange}
                         />
                     </Paper>
 
