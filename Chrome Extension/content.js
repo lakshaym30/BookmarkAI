@@ -24,7 +24,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // get the title of the current tab
         const title = document.title;
 
-        console.log(text); // or you can send this data back using sendResponse
+        function img_find() {
+            var imgs = document.getElementsByTagName("img");
+            var imgSrcs = [];
+        
+            for (var i = 0; i < imgs.length; i++) {
+                imgSrcs.push(imgs[i].src);
+            }
+        
+            return imgSrcs;
+        }
+
+        const image_urls = img_find()
+
+        // console.log(text); // or you can send this data back using sendResponse
         return fetch('http://localhost:8000/store', {
             method: 'POST',
             headers: {
@@ -39,7 +52,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ raw_text: text, url: url, title: title })
+                    body: JSON.stringify({ raw_text: text, url: url, title: title,img_urls: image_urls  })
                 });
             })
             .then(response => response.json())
