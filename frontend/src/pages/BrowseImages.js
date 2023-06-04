@@ -6,6 +6,7 @@ import SearchBar from '../components/SearchBar';
 import HomeHeader from '../components/HomeHeader';
 import SubjectList from '../components/SubjectList';
 import BookMarkList from '../components/BookMarkList';
+import BookMarkImageList from '../components/BookMarkImageList';
 
 export default function BrowseScreen(props) {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function BrowseScreen(props) {
             <Grid item xs={2}/>
             <Grid item xs={10}>
                 <SubjectList/>
-                <BookMarkList/>
+                <BookMarkImageList/>
             </Grid>
         </Grid>
         </Box>
