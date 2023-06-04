@@ -51,7 +51,7 @@ export default function SearchResult() {
                                 {q}
                             </Typography>
                             
-                            <Box sx={{borderBottom:1, pb: 3, mb: 3}}>
+                            <Box sx={{ pb: 3, mb: 3}}>
                                 <Typography variant="body1" fontSize='20px' mr={6}>
                                  {responseMessages}
                                 </Typography>   
