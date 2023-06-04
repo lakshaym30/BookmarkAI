@@ -19,7 +19,9 @@ class ConversationService:
     You are a helpful, creative, clever, and very friendly assistant. The user will be giving you a QUESTION, 
     and CONTEXT will be provided from a source. You (the assistant) may use information from the preceding conversation or the provided 
     context to answer the question. The assistant can ignore the context if it doesn't help answer the question.
+
     Use markdown format if beneficial.
+
     """
     __base_prompt = """
     QUESTION:
@@ -71,7 +73,9 @@ class ConversationService:
 
     async def chat(self, message: str):
         context = self.get_context(message)
+
         print(context)
+
         full_response = ''
 
         token_generator = self._get_message_generator(
@@ -86,6 +90,8 @@ class ConversationService:
             full_response += content
             if content == '':  # if the message is empty - ignore it
                 continue
+
             yield ChatServiceMessage(msg=content, relevant_documents=context, done=False)
 
         yield ChatServiceMessage(msg=full_response, relevant_documents=context, done=True)
+

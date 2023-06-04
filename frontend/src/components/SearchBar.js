@@ -7,13 +7,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import { useState, useEffect  } from 'react';
-import { useNavigate, createSearchParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, createSearchParams, useSearchParams, useLocation } from 'react-router-dom';
 
 export default function SearchBar(props) {
   const { height, refresh } = props;
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('q'));
+
+  const location = useLocation();
+  const currentPathname = location.pathname;
 
   useEffect(()=>{
     console.log(query)
@@ -31,7 +34,7 @@ export default function SearchBar(props) {
         if(e.key === 'Enter'){
             e.preventDefault();
             navigate({
-                pathname: "search",
+                pathname: location.pathname == "/images" ? "images" : "search",
                 search: createSearchParams({
                     q: query
                 }).toString()
