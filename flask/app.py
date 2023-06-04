@@ -74,16 +74,32 @@ def store_embedding():
     json_data = request.get_json()
     print(json_data['raw_text'][:50],'\n\nURL: ', json_data['url'])
     text = json_data['raw_text']
-    # time as a unix timestamp
     text_metadata = {"time": datetime.datetime.now().timestamp(), "url": json_data['url']}
     table = db.open_table('text')
     document = Document(page_content=text, metadata=text_metadata)
-    chunks = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0).split_documents([document])
-    docsearch = LanceDB.from_documents(chunks, embeddings, connection=table)
+    # chunks = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0).split_documents([document])
+    # print(len(chunks))
+    # print(chunks[0])
+    arr = text.split(' ')
+    text_documents = []
+    for i in range(0, len(arr), 1000):
+        chunk = ' '.join(arr[i:i+1000])
+        text_documents.append(Document(page_content=chunk, metadata=text_metadata))
+    print(len(text_documents))
+    docsearch = LanceDB.from_documents(text_documents, embeddings, connection=table)
     
-    return jsonify({'message': 'Preflight request received'}) 
+    return jsonify({'message': 'Preflight request received'}), 200
 
-
+# use curl -X POST -H "Content-Type: application/json" -d '{"query": "basketball"}' http://127.0.0.1:5000/retrieve
+# to test this endpoint
+@app.route('/retrieve', methods = ['POST'])
+def retrieve_embedding():
+        query = request.get_json()['query']
+        table = db.open_table('text')
+        docs = LanceDB(embedding=embeddings, connection=table).similarity_search(query, 5)
+        print(docs)
+        return [str(d) for d in docs]
+   
 
 
 
