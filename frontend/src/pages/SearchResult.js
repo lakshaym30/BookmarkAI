@@ -12,6 +12,7 @@ export default function SearchResult() {
     const [responseMessages, setResponseMessages] = useState([])
 
     useEffect(() => {
+        setResponseMessages([])
         const eventSource = new EventSource(`http://localhost:8000/chat?q=${q}`);
         eventSource.onmessage = (event) => {
             const msg = JSON.parse(event.data);
