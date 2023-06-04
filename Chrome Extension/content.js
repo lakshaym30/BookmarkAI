@@ -8,12 +8,24 @@ function extractText(node) {
     }
 
     let text = '';
-    for (let child of node.childNodes) {
+    for(let child of node.childNodes) {
         text += ' ' + extractText(child);
     }
 
     return text.trim();
 }
+
+function extractImageSources() {
+    var images = document.getElementsByTagName('img'); // get all images
+    var imgSources = []; // initialize empty array to hold the sources
+
+    for (var i = 0; i < images.length; i++) {
+        imgSources.push(images[i].src); // add each image's source to the array
+    }
+
+    return imgSources; // return the array of image sources
+}
+
 
 // Listen for messages
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
