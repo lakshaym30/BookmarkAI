@@ -72,7 +72,7 @@ def handle_options():
 @app.route('/store', methods = ['POST'])
 def store_embedding():
     json_data = request.get_json()
-    print(json_data['raw_text'][:50],'\n\nURL: ', json_data['url'], '\n\n','title', json_data['title'])
+    print(json_data['raw_text'][:50],'\n\n', 'URL: ', json_data['url'], '\n\n','TITLE', json_data['title'], '\n\n', json_data['image_urls'])
     text = json_data['raw_text']
     text_metadata = {"time": datetime.datetime.now().timestamp(), "url": json_data['url']}
     table = db.open_table('text')
