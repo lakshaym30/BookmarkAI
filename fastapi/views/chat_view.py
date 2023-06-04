@@ -35,7 +35,7 @@ async def sse_generator(messages_generator: AsyncGenerator[ChatServiceMessage, N
             yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n"
         else:
             print(f'yielding {msg.dict()}')
-            yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n
+            yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n"
 
 
 @router.get('/chat', responses={200: {"content": {"text/event-stream": {}}}})

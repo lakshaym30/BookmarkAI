@@ -91,13 +91,6 @@ export default function SearchResult() {
                         urls={[...new Set(responseMessages.flatMap(mes => mes.documents.map(doc => doc.metadata.url)))]}
                     /> 
                 </Grid>
-
-             
-                {responseMessages.length > 0 &&
-                    <Grid item xs={4}>
-                        <SourceList source={responseMessages} urls={responseMessages[0].documents.map(doc => doc.metadata.url)}/> 
-                    </Grid>
-                }
             </Grid>
         </Box>
 
