@@ -1,5 +1,5 @@
 {
-  "name": "Text Extractor",
+  "name": "BookmarkAI",
   "version": "1.0",
   "manifest_version": 3,
   "permissions": ["activeTab"],
@@ -11,5 +11,10 @@
       "matches": ["http://*/*", "https://*/*"],
       "js": ["content.js"]
     }
-  ]
+  ], 
+  "icons": {
+    "16": "extension_logo.png", 
+    "48": "extension_logo.png", 
+    "128": "extension_logo.png"
+  }
 }
