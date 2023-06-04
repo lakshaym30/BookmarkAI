@@ -28,10 +28,10 @@ async def sse_generator(messages_generator: AsyncGenerator[ChatServiceMessage, N
         msg_dict = {'chat_response': msg.msg, 'documents': [d.dict() for d in msg.relevant_documents], 'done': msg.done}
         if msg.done:
             # save to db
-            print(f'yielding {msg.dict()}')
+            # print(f'yielding {msg.dict()}')
             yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n"
         else:
-            print(f'yielding {msg.dict()}')
+            # print(f'yielding {msg.dict()}')
             yield f"data: {json.dumps(msg_dict, cls=NumpyEncoder)}\n\n"
 
 

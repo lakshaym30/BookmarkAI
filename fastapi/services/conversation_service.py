@@ -70,7 +70,7 @@ class ConversationService:
 
     async def chat(self, message: str):
         context = self.get_context(message)
-        print(context)
+        # print(context)
         full_response = ''
 
         token_generator = self._get_message_generator(

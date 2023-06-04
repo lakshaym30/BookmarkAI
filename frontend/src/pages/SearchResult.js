@@ -19,82 +19,91 @@ export default function SearchResult() {
             if (msg.done) {
                 console.log('Done!');
                 eventSource.close();
-              }
+            }
             console.log(responseMessages.map(mes => mes.chat_response).join(''))
             console.log(responseMessages.flatMap(mes => mes.documents))
-          };
-
-
-          
-      
-          // Cleanup on component unmount
-          return () => {
+        };
+        // Cleanup on component unmount
+        return () => {
             eventSource.close();
-          };
+        };
     }, [searchParams])
 
-    function keyPress(e){
-        if(e.key === 'Enter'){
+    function keyPress(e) {
+        if (e.key === 'Enter') {
             e.preventDefault();
             // setChats([...chats, e.target.value]);
+            // send user to link http://localhost:3000/search?q={}
+            setResponseMessages([]);
+            setSearchParams({ q: inputValue });
+            setInputValue('');
         }
     }
+    const [inputValue, setInputValue] = useState('');
+
+    const handleInputChange = (event) => {
+        setInputValue(event.target.value);
+    };
 
 
-    return(
+    return (
         <>
-        <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-                <Grid item xs={2}/>
-                <Grid item xs={6} sx={{mt:5}}>
-                     {/* Chat Messages */}
-                    <Paper sx={{height: 700, overflow: 'auto'}} elevation={0}>
-                        <Stack sx={{ mr: 6}} height='50px'>
-                            <Typography variant="h3" gutterBottom>
-                                {q}
-                            </Typography>
-                            
-                            <Box sx={{ pb: 3, mb: 3}}>
-                                <Typography variant="body1" fontSize='20px' mr={6}>
-                                 {responseMessages.map(mes => mes.chat_response).join('')}
-                                </Typography>   
-                            </Box>    
-                           
-                        </Stack>
-                    </Paper>
+            <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={2} />
+                    <Grid item xs={6} sx={{ mt: 5 }}>
+                        {/* Chat Messages */}
+                        <Paper sx={{ height: 700, overflow: 'auto' }} elevation={0}>
+                            <Stack sx={{ mr: 6 }} height='50px'>
+                                <Typography variant="h3" gutterBottom>
+                                    {q}
+                                </Typography>
 
-                    {/* Chat Bar */}
-                    <Paper
-                        component="form"
-                        position="fixed"
-                        sx={{display: 'flex', position: 'fixed',
-                        bottom: 50,
-                        width: 900, 
-                        alignItems: 'center', 
-                        height: 70, border:1, borderColor: "#DFE1E5"}}
-                    >
-                        <InputBase
-                            sx={{ ml: 1, flex: 1, fontSize: 20, m: 3}}
-                            onKeyDown={keyPress}
-                            placeholder="Send A Message"
-                            inputProps={{ 'aria-label': 'search google maps' }}
+                                <Box sx={{ pb: 3, mb: 3 }}>
+                                    <Typography variant="body1" fontSize='20px' mr={6}>
+                                        {responseMessages.map(mes => mes.chat_response).join('')}
+                                    </Typography>
+                                </Box>
+
+                            </Stack>
+                        </Paper>
+
+                        {/* Chat Bar */}
+                        <Paper
+                            component="form"
+                            position="fixed"
+                            sx={{
+                                display: 'flex', position: 'fixed',
+                                bottom: 50,
+                                width: 900,
+                                alignItems: 'center',
+                                height: 70, border: 1, borderColor: "#DFE1E5"
+                            }}
+                        >
+                            <InputBase
+                                sx={{ ml: 1, flex: 1, fontSize: 20, m: 3 }}
+                                onKeyDown={keyPress}
+                                placeholder="Send A Message"
+                                inputProps={{ 'aria-label': 'search google maps' }}
+                                onChange={handleInputChange}
+                                value={inputValue}
+                            />
+                        </Paper>
+
+                    </Grid>
+
+                    <Grid item xs={4}>
+                        <SourceList
+                            source={responseMessages}
+                            urls={[...new Set(responseMessages.flatMap(mes => mes.documents.map(doc => doc.metadata.url)))]}
                         />
-                    </Paper>
+                    </Grid>
 
                 </Grid>
-                
-                <Grid item xs={4}>
-                    <SourceList 
-                        source={responseMessages}
-                        urls={[...new Set(responseMessages.flatMap(mes => mes.documents.map(doc => doc.metadata.url)))]}
-                    /> 
-                </Grid>
-
-            </Grid>
-        </Box>
+            </Box>
 
 
-       
+
         </>
     )
 }
