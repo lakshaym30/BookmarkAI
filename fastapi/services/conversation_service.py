@@ -67,7 +67,7 @@ class ConversationService:
 
         return msg_iterator.aiter()
 
-    def chat(self, message: str):
+    async def chat(self, message: str):
         context = self.get_context(message)
         full_response = ''
 
