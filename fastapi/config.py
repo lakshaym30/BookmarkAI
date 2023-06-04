@@ -28,7 +28,7 @@ class Config(metaclass=Singleton):
 
     def __init__(self):
         self.fast_llm_model = os.getenv("FAST_LLM_MODEL", "gpt-3.5-turbo")
-        self.smart_llm_model = os.getenv("SMART_LLM_MODEL", "gpt-4")
+        self.smart_llm_model = os.getenv("SMART_LLM_MODEL", "gpt-4-32k")
 
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         openai.api_key = self.openai_api_key

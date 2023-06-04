@@ -14,7 +14,8 @@ router = APIRouter()
 @router.post('/store')
 def store(document: ExtensionDocument):
     vectorstore = get_vectorstore('text', OpenAIEmbeddings())
-    chunks = CharacterTextSplitter().split_text(document.raw_text)
+    chunks = CharacterTextSplitter(chunk_size=10000, chunk_overlap=500, separator='.').split_text(document.raw_text)
+    print(f'create {len(chunks)} chunks')
     chunk_docs = [Document(
         page_content=chunk,
         metadata={

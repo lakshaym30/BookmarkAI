@@ -51,5 +51,6 @@ async def chat(q: str):
 
 @router.post('/search')
 async def search(message: UserSearchMessage):
+    chat_service = ConversationService(vectorstore=get_vectorstore('text', OpenAIEmbeddings()))
     relevant_docs = chat_service.get_context(message.query)
     return [d.dict() for d in relevant_docs]
