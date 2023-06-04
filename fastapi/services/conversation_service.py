@@ -30,11 +30,11 @@ class ConversationService:
         self.vectorstore = vectorstore
 
     def _get_system_prompt(self) -> str:
-        template = PromptTemplate(self.__system_prompt)
+        template = PromptTemplate(template=self.__system_prompt, input_variables=[])
         return template.format()
 
     def _get_user_prompt(self, question: str, context: str) -> str:
-        template = PromptTemplate(self.__base_prompt)
+        template = PromptTemplate(template=self.__base_prompt, input_variables=["question", "context"])
         return template.format(question=question, context=context)
 
     def get_context(self, message: str) -> List[Document]:
@@ -71,21 +71,18 @@ class ConversationService:
         context = self.get_context(message)
         full_response = ''
 
-        try:
-            token_generator = self._get_message_generator(
-                context=context,
-                user_message=BaseMessage(content=message),
-            )
-        except Exception as e:
-            yield ChatServiceMessage(msg=f'sorry, something went wrong {str(e)}', done=True)
-        else:
-            # emit content + save it to full_response
-            async for chunk in token_generator:
-                # content = chunk['choices'][0]['delta'].get('content', '')  # extract the message
-                content = chunk
-                full_response += content
-                if content == '':  # if the message is empty - ignore it
-                    continue
-                yield ChatServiceMessage(msg=content)
+        token_generator = self._get_message_generator(
+            context=context,
+            user_message=HumanMessage(content=message),
+        )
+
+        # emit content + save it to full_response
+        async for chunk in token_generator:
+            # content = chunk['choices'][0]['delta'].get('content', '')  # extract the message
+            content = chunk
+            full_response += content
+            if content == '':  # if the message is empty - ignore it
+                continue
+            yield ChatServiceMessage(msg=content)
 
         yield ChatServiceMessage(msg=full_response, done=True)
