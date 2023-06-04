@@ -25,13 +25,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const title = document.title;
 
         console.log(text); // or you can send this data back using sendResponse
-
-        fetch('http://localhost:5000/store', {
-            method: 'OPTIONS',
+        return fetch('http://localhost:8000/store', {
+            method: 'POST',
             headers: {
-                'Access-Control-Request-Method': 'POST',
-                'Access-Control-Request-Headers': 'Content-Type'
-            }
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ raw_text: text, url: url })
         })
             .then(response => {
                 // Proceed with the POST request
