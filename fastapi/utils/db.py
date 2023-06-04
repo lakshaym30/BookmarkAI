@@ -15,9 +15,9 @@ def get_vectorstore(table_name: str, embedding: Embeddings) -> VectorStore:
     if not table_name in db.table_names():
         table = db.create_table(table_name, data=[
             {
-                "vector": embedding.embed_query("LanceDB is awesome"),
-                "text": "LanceDB is awesome",
-                "url": "https://lancedb.com/",
+                "vector": embedding.embed_query("Hello World"),
+                "text": "Hello World",
+                "url": "https://google.com/",
                 "time": datetime.now().timestamp()}
         ])
     else:
