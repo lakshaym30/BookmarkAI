@@ -10,9 +10,9 @@ export default function SourceList(props){
             Sources
         </Typography>
         {urls.map((url, i) => (
-                <Link href={url} underline="hover" sx={{fontSize: '20px'}}>
+                <a target="_blank" rel="noopener" href={url} underline="hover" sx={{fontSize: '20px'}}>
                 {`[${i}] ${url}`}
-                </Link>
+                </a>
             ))}
         </Stack>
         </Box>
