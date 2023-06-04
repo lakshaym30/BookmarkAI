@@ -60,31 +60,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             console.error(error);
         });
 
-        })
-            .then(response => {
-                // Proceed with the POST request
-                return fetch('http://localhost:5000/store', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ raw_text: text, url: url, title: title,img_urls: image_urls  })
-                });
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Process the response from the POST request
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
-
-        // .then(response => console.log(response.text()))
-        // .then(result => console.log(result))
-        // .catch(error => console.error(error));
-
-        sendResponse({ result: text });
-    }
-});
+}});
