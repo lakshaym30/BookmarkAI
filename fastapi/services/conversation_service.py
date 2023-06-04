@@ -16,8 +16,9 @@ config = Config()
 
 class ConversationService:
     __system_prompt = """
-    The following is a conversation between a human and an AI assistant. The assistant is helpful, creative, clever, and very friendly.
-    The assistant may use a contextual information, that user has saved in the past or ignore this context if it isn't relevant.
+    You are a helpful, creative, clever, and very friendly assistant. The user will be giving you a QUESTION, 
+    and CONTEXT will be provided from a source. You (the assistant) may use information from the preceding conversation or the provided 
+    context to answer the question. The assistant can ignore the context if it doesn't help answer the question.
     """
     __base_prompt = """
     QUESTION:
