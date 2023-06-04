@@ -24,7 +24,7 @@ export default function SearchResult() {
 
             </Grid>
             <Grid item xs={4}>
-                <SourceList source={mock_data.relevant_pages}/> 
+                <SourceList source={mock_data.relevant_pages} urls={['wwww.example.com', 'www.helloworld.com']}/> 
             </Grid>
         </Grid>
         </Box>

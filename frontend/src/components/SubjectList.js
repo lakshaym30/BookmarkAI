@@ -3,16 +3,20 @@ import React, { useState } from 'react';
 
 const lists = [
     { id: 1, title: "Generative AI" },
-    { id: 2, title: "Hackathon" },
+    { id: 2, title: "Amplitude Analytics" },
     { id: 3, title: "San Francisco" }
   ];
   
 // omitted for now
-export default function SubjectList() {
+export default function SubjectList(props) {
+    const { setGenAI } = props;
     const [selected, setSelected] = useState(0);
 
     const handleColor = (row) => {
         setSelected(row.id);
+        if (row.id == 1) {
+            setGenAI(true);
+        }
       };
     
     

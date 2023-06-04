@@ -1,10 +1,19 @@
 import * as React from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
+import { image_list } from '../services-mock/fake_dataset';
 
 export default function BookMarkImageList() {
   return (
-    <ImageList sx={{ width: "90%", maxHeight: "100vh" }} cols={5}>
+    <ImageList sx={{ width: "90%", maxHeight: "100vh" }} cols={3}>
+      {image_list.map((item) => (
+        <ImageListItem key={item.img}>
+          <img
+            src={`${item}`}
+            loading="lazy"
+          />
+        </ImageListItem>
+      ))}
       {itemData.map((item) => (
         <ImageListItem key={item.img}>
           <img

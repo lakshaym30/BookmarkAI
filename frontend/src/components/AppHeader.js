@@ -18,7 +18,7 @@ export default function AppHeader() {
   const [refresh, setRefresh] = useState(false);
 
   function onClickHandler() {
-    setRefresh(!refresh)
+    window.location.reload()
     navigate('/browse')
   }
 
