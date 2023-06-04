@@ -16,17 +16,17 @@ export default function SearchResult() {
         eventSource.onmessage = (event) => {
             const msg = JSON.parse(event.data);
             console.log(msg);
-            setResponseMessages((messages) => [...messages, msg]);
             if (msg.done) {
                 console.log('Done!');
                 eventSource.close();
-              }
+            } else {
+                setResponseMessages((messages) => [...messages, msg]);
+            }
+            
             console.log(responseMessages.map(mes => mes.chat_response).join(''))
             console.log(responseMessages.flatMap(mes => mes.documents))
           };
 
-          
-      
           // Cleanup on component unmount
           return () => {
             eventSource.close();
