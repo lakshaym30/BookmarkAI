@@ -3,19 +3,34 @@ import React, { useState } from 'react';
 
 const lists = [
     { id: 1, title: "Generative AI" },
-    { id: 2, title: "Amplitude Analytics" },
-    { id: 3, title: "San Francisco" }
+    { id: 2, title: "San Francisco" },
+    { id: 3, title: "LanceDB" },
+    { id: 4, title: "Developer Tools" },
+    { id: 5, title: "Startup" },
   ];
   
 // omitted for now
 export default function SubjectList(props) {
-    const { setGenAI } = props;
-    const [selected, setSelected] = useState(0);
+    const { setGenAI, setLancedb } = props;
+    const [ selected, setSelected ] = useState(0);
 
     const handleColor = (row) => {
-        setSelected(row.id);
-        if (row.id == 1) {
-            setGenAI(true);
+        if (row.id == selected) {
+            setSelected(0);
+            setGenAI(false);
+            setLancedb(false);
+        } else {
+            setSelected(row.id);
+            if (row.id == 1) {
+                setGenAI(true);
+                setLancedb(false);
+            } else if (row.id == 3) {
+                setGenAI(false);
+                setLancedb(true);
+            } else {
+                setGenAI(false);
+                setLancedb(false);
+            }
         }
       };
     

@@ -23,15 +23,15 @@ export default function BookMarkCard(props) {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {title ? title : "What is generative AI?"}
+            {title ? title : "Title"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {description ? description : "Generative artificial intelligence (AI) describes algorithms (such as ChatGPT) that can be used to create new content, including audio, code, images, text, simulations, and videos."}
+            {description && description}
           </Typography>
         </CardContent>
       <CardActions>
         <Button size="small" color="primary">
-          {url ? displayUrl(url) : displayUrl("https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-generative-ai")}
+          {url ? displayUrl(url) : ""}
         </Button>
       </CardActions>
     </Card>
