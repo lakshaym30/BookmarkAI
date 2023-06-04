@@ -21,6 +21,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const text = extractText(document.body);
         // get the url of the current tab
         const url = window.location.href;
+        // get the title of the current tab
+        const title = document.title;
 
         console.log(text); // or you can send this data back using sendResponse
 
@@ -38,7 +40,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ raw_text: text, url: url })
+                    body: JSON.stringify({ raw_text: text, url: url, title: title })
                 });
             })
             .then(response => response.json())
