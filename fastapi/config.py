@@ -28,9 +28,10 @@ class Config(metaclass=Singleton):
 
     def __init__(self):
         self.fast_llm_model = os.getenv("FAST_LLM_MODEL", "gpt-3.5-turbo")
-
-
         self.smart_llm_model = os.getenv("SMART_LLM_MODEL", "gpt-4-32k")
+
+        self.chunk_size = int(os.getenv("CHUNK_SIZE", 1000))
+        self.chunk_overlap = int(os.getenv("CHUNK_OVERLAP", 50))
 
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         openai.api_key = self.openai_api_key
@@ -38,3 +39,4 @@ class Config(metaclass=Singleton):
 
         self.debug_mode = os.getenv("DEBUG_MODE", "False") == "True"
         self.lancedb_url = os.getenv("LANCEDB_URL", "lancedb")
+        self.weaviate_url = os.getenv("WEAVIATE_URL", "weaviate")

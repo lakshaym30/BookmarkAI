@@ -1,6 +1,7 @@
 import asyncio
-from typing import AsyncIterator, List
+from typing import AsyncIterator, List, Dict, Any
 
+import weaviate
 from langchain import PromptTemplate
 from langchain.callbacks import AsyncIteratorCallbackHandler
 from langchain.callbacks.manager import AsyncCallbackManager
@@ -10,6 +11,7 @@ from langchain.vectorstores import VectorStore, LanceDB
 
 from config import Config
 from models.chat import ChatServiceMessage
+from utils.db import get_vectorstore
 
 config = Config()
 
@@ -42,9 +44,25 @@ class ConversationService:
         return template.format(question=question, context=context)
 
     def get_context(self, message: str) -> List[Document]:
-        retriever = self.vectorstore.as_retriever()
-        docs = retriever.get_relevant_documents(message)
-        return docs
+        client = get_vectorstore()
+        where_filter = {
+            "path": ["user_id"],
+            "operator": "Equal",
+            "valueString": "user1"
+        }
+
+        res = client.query.get(
+            "Document", ["title", "url", "content"]
+        ).with_where(
+            where_filter
+        ).with_near_text({
+            "concepts": [message],
+            "certainty": 0.8,
+        }).do()
+
+        docs: List[Dict[str, Any]] = res['data']['Get']['Document']
+
+        return [Document(page_content=d.pop('content'), metadata=d) for d in docs]
 
     @classmethod
     def _format_context(cls, context: List[Document]) -> str:
@@ -58,7 +76,7 @@ class ConversationService:
             verbose=True,
             callback_manager=AsyncCallbackManager([msg_iterator]),
             streaming=True,
-            model_name=config.smart_llm_model,
+            model_name=config.fast_llm_model,
         )
         msgs: List[List[BaseMessage]] = [[
             SystemMessage(content=self._get_system_prompt()),
@@ -73,9 +91,6 @@ class ConversationService:
 
     async def chat(self, message: str):
         context = self.get_context(message)
-
-        print(context)
-
         full_response = ''
 
         token_generator = self._get_message_generator(

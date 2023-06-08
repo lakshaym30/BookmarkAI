@@ -40,7 +40,7 @@ async def sse_generator(messages_generator: AsyncGenerator[ChatServiceMessage, N
 
 @router.get('/chat', responses={200: {"content": {"text/event-stream": {}}}})
 async def chat(q: str):
-    chat_service = ConversationService(vectorstore=get_vectorstore('text', OpenAIEmbeddings()))
+    chat_service = ConversationService(vectorstore=get_vectorstore())
     completion = chat_service.chat(
         message=q,
     )
@@ -54,6 +54,6 @@ async def chat(q: str):
 
 @router.post('/search')
 async def search(message: UserSearchMessage):
-    chat_service = ConversationService(vectorstore=get_vectorstore('text', OpenAIEmbeddings()))
+    chat_service = ConversationService(vectorstore=get_vectorstore())
     relevant_docs = chat_service.get_context(message.query)
     return [d.dict() for d in relevant_docs]
