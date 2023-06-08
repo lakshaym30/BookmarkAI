@@ -11,6 +11,7 @@ from langchain.vectorstores import VectorStore, LanceDB
 
 from config import Config
 from models.chat import ChatServiceMessage
+from services.context_service import ContextService
 from utils.db import get_vectorstore
 
 config = Config()
@@ -32,8 +33,8 @@ class ConversationService:
     {context}
     """
 
-    def __init__(self, vectorstore: VectorStore):
-        self.vectorstore = vectorstore
+    def __init__(self, context_service: ContextService):
+        self.context_service = context_service
 
     def _get_system_prompt(self) -> str:
         template = PromptTemplate(template=self.__system_prompt, input_variables=[])
@@ -42,27 +43,6 @@ class ConversationService:
     def _get_user_prompt(self, question: str, context: str) -> str:
         template = PromptTemplate(template=self.__base_prompt, input_variables=["question", "context"])
         return template.format(question=question, context=context)
-
-    def get_context(self, message: str) -> List[Document]:
-        client = get_vectorstore()
-        where_filter = {
-            "path": ["user_id"],
-            "operator": "Equal",
-            "valueString": "user1"
-        }
-
-        res = client.query.get(
-            "Document", ["title", "url", "content"]
-        ).with_where(
-            where_filter
-        ).with_near_text({
-            "concepts": [message],
-            "certainty": 0.8,
-        }).do()
-
-        docs: List[Dict[str, Any]] = res['data']['Get']['Document']
-
-        return [Document(page_content=d.pop('content'), metadata=d) for d in docs]
 
     @classmethod
     def _format_context(cls, context: List[Document]) -> str:
@@ -90,7 +70,7 @@ class ConversationService:
         return msg_iterator.aiter()
 
     async def chat(self, message: str):
-        context = self.get_context(message)
+        context = self.context_service.get_context(message=message, user_id='user1')
         full_response = ''
 
         token_generator = self._get_message_generator(

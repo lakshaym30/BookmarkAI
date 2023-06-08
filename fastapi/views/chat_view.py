@@ -9,6 +9,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from starlette.responses import StreamingResponse
 
 from models.chat import UserChatMessage, ChatServiceMessage, UserSearchMessage
+from services.context_service import ContextService
 from services.conversation_service import ConversationService
 from utils.db import get_vectorstore
 
@@ -17,6 +18,7 @@ router = APIRouter()
 
 logger = logging.getLogger(__name__)
 
+context_service = ContextService(client=get_vectorstore())
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -40,7 +42,7 @@ async def sse_generator(messages_generator: AsyncGenerator[ChatServiceMessage, N
 
 @router.get('/chat', responses={200: {"content": {"text/event-stream": {}}}})
 async def chat(q: str):
-    chat_service = ConversationService(vectorstore=get_vectorstore())
+    chat_service = ConversationService(context_service=context_service)
     completion = chat_service.chat(
         message=q,
     )
@@ -54,6 +56,5 @@ async def chat(q: str):
 
 @router.post('/search')
 async def search(message: UserSearchMessage):
-    chat_service = ConversationService(vectorstore=get_vectorstore())
-    relevant_docs = chat_service.get_context(message.query)
+    relevant_docs = context_service.get_context(message.query, "user1")
     return [d.dict() for d in relevant_docs]
